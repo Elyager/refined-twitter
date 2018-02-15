@@ -41,6 +41,14 @@ export const observeEl = (el, listener, options = {childList: true}) => {
 	return observer;
 };
 
+export const domify = html => {
+	const div = document.createElement('div');
+	div.innerHTML = html;
+	return div;
+};
+
+export const getUsername = () => document.querySelector('.DashUserDropdown-userInfo .username > b').textContent;
+
 export const isModalOpen = () => {
 	const hasPermalinkOverlay = $('#permalink-overlay').is(':visible');
 	const isDMModalOpen = $('#dm_dialog').is(':visible');

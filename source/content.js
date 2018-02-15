@@ -2,27 +2,13 @@ import domLoaded from 'dom-loaded';
 import {observeEl, safeElementReady, safely} from './libs/utils';
 import autoLoadNewTweets from './features/auto-load-new-tweets';
 import inlineInstagramPhotos from './features/inline-instagram-photos';
+import userChoiceColor from './features/user-choice-color';
+import codeHighlight from './features/code-highlight';
+import mentionHighlight from './features/mentions-highlight';
+import addLikesButtonNavBar from './features/likes-button-navbar';
 
 function cleanNavbarDropdown() {
 	$('#user-dropdown').find('[data-nav="all_moments"], [data-nav="ads"], [data-nav="promote-mode"], [data-nav="help_center"]').parent().hide();
-}
-
-function useNativeEmoji() {
-	$('.Emoji--forText').replaceWith(function () {
-		return $(this).attr('alt');
-	});
-
-	$('.Emoji--forLinks').replaceWith(function () {
-		return $(this).siblings('span.visuallyhidden').text();
-	});
-}
-
-function hideFollowersActivity() {
-	$('#stream-items-id .js-activity-follow').hide();
-}
-
-function hideListAddActivity() {
-	$('#stream-items-id .js-activity-list_member_added').hide();
 }
 
 function hideLikeTweets() {
@@ -41,6 +27,8 @@ async function init() {
 	}
 
 	document.documentElement.classList.add('refined-twitter');
+
+	safely(addLikesButtonNavBar);
 
 	await domLoaded;
 	onDomReady();
@@ -70,11 +58,11 @@ function onDomReady() {
 
 	onRouteChange(() => {
 		safely(autoLoadNewTweets);
+		safely(userChoiceColor);
 
 		onNewTweets(() => {
-			safely(useNativeEmoji);
-			safely(hideFollowersActivity);
-			safely(hideListAddActivity);
+			safely(codeHighlight);
+			safely(mentionHighlight);
 			safely(hideLikeTweets);
 			safely(inlineInstagramPhotos);
 			safely(hidePromotedTweets);
@@ -82,7 +70,8 @@ function onDomReady() {
 	});
 
 	onSingleTweetOpen(() => {
-		safely(useNativeEmoji);
+		safely(codeHighlight);
+		safely(mentionHighlight);
 		safely(inlineInstagramPhotos);
 	});
 }
